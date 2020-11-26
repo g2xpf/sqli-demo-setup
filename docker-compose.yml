@@ -1,0 +1,28 @@
+mariadb:
+  build: ./sql
+  container_name: sqli-demo-mariadb
+  volumes:
+    - "./mariadb:/var/lib/mysql"
+  ports:
+     - 3306:3306
+  environment:
+    - MYSQL_DATABASE=sqli_demo
+    - MYSQL_USER=${MYSQL_USER}
+    - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+
+phpmyadmin:
+  image: phpmyadmin/phpmyadmin
+  container_name: sqli-demo-phpmyadmin
+  volumes:
+     - "./phpmyadmin:/sessions"
+  ports:
+     - 8080:80
+  environment:
+    - PMA_ARBITRARY=1
+    - PMA_HOST=mariadb
+    - PMA_USER=${MYSQL_USER}
+    - PMA_PASSWORD=${MYSQL_PASSWORD}
+    - TZ=Asia/Tokyo
+  links:
+    - mariadb
